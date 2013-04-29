@@ -1,1 +1,21 @@
-<h1> Album::Add </h1>
+<?php
+	$title = 'Album::Add';
+	$this->headTitle($title);
+?>
+<h2><?= $this->escapeHtml($title) ?></h2>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action',$this->url('album', array('action' =>'add')));
+	$form->prepare();
+?>
+<?= $this->form()->openTag($form) ?>
+<?= $this->formHidden($form->get('id')) ?>
+
+<?= $this->formRow($form->get('title')) ?>
+<?= $this->formRow($form->get('artist')) ?>
+
+<?= $this->formSubmit($form->get('submit')) ?>
+
+<a href="<?= $this->url('album', array('action' =>'index'))?>">Regresar</a>
+
+<?= $this->form()->closeTag() ?>

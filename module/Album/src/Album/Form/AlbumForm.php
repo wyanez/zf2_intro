@@ -17,7 +17,7 @@ class AlbumForm extends Form{
 		$arr_names=array('title','artist');
 		$arr_labels=array('Titulo','Artista');
 
-		for($i=0; $i<length($arr_names);$i++){
+		for($i=0; $i<count($arr_names);$i++){
 			$this->add( array(
 				'name' => $arr_names[$i],
 				'type' => 'Text',

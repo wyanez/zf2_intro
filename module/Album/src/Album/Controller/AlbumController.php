@@ -4,6 +4,9 @@ namespace Album\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+use Album\Form\AlbumForm;
+use Album\Form\AlbumFilter;
+
 class AlbumController extends AbstractActionController{
 	protected $albumTable;
 
@@ -14,6 +17,14 @@ class AlbumController extends AbstractActionController{
 	}
 
 	public function addAction(){
+		$form = new AlbumForm();
+		$form->get('submit')->setValue('Agregar');
+
+		$request= $this->getRequest();
+		if ($request->isPost()){
+			//Se procesa el form
+		}
+		return array('form' => $form);
 	}
 
 	public function editAction(){
