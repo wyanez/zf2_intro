@@ -3,8 +3,8 @@ namespace Album;
 
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
-use Album\ModelAlbum;
-use Album\ModelAlbumTable;
+use Album\Model\Album;
+use Album\Model\AlbumTable;
 
 class Module
 {
@@ -38,7 +38,7 @@ class Module
                         $table = new AlbumTable($tableGateway);
                         return $table;
                     },
-                );
+                ),
             );
     }
 }
