@@ -44,5 +44,9 @@
 			}	
 			return $row; 
 		}
+
+		public function deleteAlbum($id){
+			$this->tableGateway->delete(array('id'=> $id));
+		}		
 	}
 ?>
