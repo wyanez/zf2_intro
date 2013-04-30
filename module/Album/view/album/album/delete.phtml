@@ -1,1 +1,7 @@
-<h1> Album::Delete </h1>
+<?php
+	$title = 'Album::Eliminar';
+	$this->headTitle($title);
+?>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+
+<a href="<?= $this->url('album', array('action' =>'index'))?>">Regresar</a>

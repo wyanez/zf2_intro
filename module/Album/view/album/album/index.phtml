@@ -1,10 +1,10 @@
 <?php
-	$title = 'My Albums';
+	$title = 'Mis Albums';
 	$this->headTitle($title);
 ?>
 <h2><?php echo $this->escapeHtml($title); ?></h2>
 <p>
-    <a href="<?php echo $this->url('album', array('action'=>'add'));?>">Add new album</a>
+    <a href="<?php echo $this->url('album', array('action'=>'add'));?>"><img src="/img/add.png" title="Agregar Album"/> Nuevo Album</a>
 </p>
 
 <table class="table">
@@ -19,9 +19,9 @@
     <td><?php echo $this->escapeHtml($album->artist);?></td>
     <td>
         <a href="<?php echo $this->url('album',
-            array('action'=>'edit', 'id' => $album->id));?>">Edit</a>
+            array('action'=>'edit', 'id' => $album->id));?>"><img src="/img/edit.png" title="Editar Album"/></a>
         <a href="<?php echo $this->url('album',
-            array('action'=>'delete', 'id' => $album->id));?>">Delete</a>
+            array('action'=>'delete', 'id' => $album->id));?>"><img src="/img/delete.png" title="Eliminar Album"/></a>
     </td>
 </tr>
 <?php endforeach; ?>
