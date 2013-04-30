@@ -36,7 +36,7 @@
 		}
 
 		public function getAlbum($id){
-			$id= (int) $album->id;
+			$id= (int) $id;
 			$rowset = $this->tableGateway->select(array('id'=>$id));
 			$row = $rowset->current();
 			if(!$row){

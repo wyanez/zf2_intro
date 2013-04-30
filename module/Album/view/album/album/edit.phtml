@@ -3,5 +3,24 @@
 	$this->headTitle($title);
 ?>
 <h2><?php echo $this->escapeHtml($title); ?></h2>
+<?php 
+	$form = $this->form;
+	$form->setAttribute('action', $this->url(
+	    'album',
+	    array(
+	        'action' => 'edit',
+	        'id'     => $this->id,
+	    )
+	));
+	$form->prepare();
 
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+	echo $this->formRow($form->get('title'));
+	echo $this->formRow($form->get('artist'));
+	echo $this->formSubmit($form->get('submit'));
+?>
 <a href="<?= $this->url('album', array('action' =>'index'))?>">Regresar</a>
+<?php
+	echo $this->form()->closeTag();
+?>
