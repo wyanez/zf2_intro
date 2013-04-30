@@ -10,6 +10,7 @@ use Album\Model\Album;
 
 class AlbumController extends AbstractActionController{
 	protected $albumTable;
+	protected $form;
 
 	public function indexAction(){
 		return new ViewModel( array(
@@ -18,17 +19,13 @@ class AlbumController extends AbstractActionController{
 	}
 
 	public function addAction(){
-		$form = new AlbumForm();
-		$form->get('submit')->setValue('Agregar');
+		$form=$this->getForm('Agregar');
 
 		$request= $this->getRequest();
 		if ($request->isPost()){
 			//Se procesa el form
-			$albumFilter = new AlbumFilter();
-			$form->setInputFilter($albumFilter->getInputFilter());
-			$form->setData($request->getPost());
-
-			if($form->isValid()){
+			$is_valid = $this->filterForm($form,$request->getPost());
+			if($is_valid){
 				$album = new Album(); 
 				$album->exchangeArray($form->getData());
 				$this->getAlbumTable()->saveAlbum($album);
@@ -41,9 +38,60 @@ class AlbumController extends AbstractActionController{
 	}
 
 	public function editAction(){
+		$id = (int) $this->params()->fromRoute('id',0);
+		if(!$id){
+			return $this->redirect()->toRoute('album');
+		} 
+
+		try{
+			$album = $this->getAlbumTable()->getAlbum($id);
+		}
+		catch(\Exception $ex){
+			return $this->redirect()->toRoute('album');	
+		}
+
+		$form = $this->getForm('Editar');
+		$form->bind($album);
+
+		$request= $this->getRequest();
+		if ($request->isPost()){
+			//Se procesa el form
+			$is_valid = $this->filterForm($form,$request->getPost());
+			if($is_valid){
+				$this->getAlbumTable()->saveAlbum($form->getData());
+				//TODO Imprimir un mensaje de exito
+				return $this->redirect()->toRoute('album');	
+			}	
+		}
+
+		return array('id'=> $id , 
+			         'form' =>$form);
 	}
 
 	public function deleteAction(){
+		$id = (int) $this->params()->fromRoute('id',0);
+		if(!$id){
+			return $this->redirect()->toRoute('album');
+		} 
+
+		$request= $this->getRequest();
+		if ($request->isPost()){
+			//se procede a eliminar de acuerdo a la selección del usuario
+			$del = $request->getPost('del', 'No');
+
+            if ($del == 'Si') {
+                $id = (int) $request->getPost('id');
+                $this->getAlbumTable()->deleteAlbum($id);
+            }
+
+			//TODO Imprimir un mensaje de exito
+			return $this->redirect()->toRoute('album');		
+		}
+
+		return array(
+            'id'    => $id,
+            'album' => $this->getAlbumTable()->getAlbum($id)
+        );		
 	}
 
 	private function getAlbumTable(){
@@ -52,6 +100,19 @@ class AlbumController extends AbstractActionController{
 			$this->albumTable = $sm->get('Album\Model\AlbumTable'); 
 		}
 		return $this->albumTable;
+	}
+
+	private function getForm($modo){
+		$this->form = new AlbumForm();
+		$this->form->get('submit')->setValue($modo);
+		return $this->form;
+	}
+
+	private function filterForm($form,$data){
+		$albumFilter = new AlbumFilter();
+		$form->setInputFilter($albumFilter->getInputFilter());
+		$form->setData($data);
+		return $form->isValid();
 	}
 }
 ?>
