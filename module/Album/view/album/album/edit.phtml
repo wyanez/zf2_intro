@@ -12,15 +12,5 @@
 	        'id'     => $this->id,
 	    )
 	));
-	$form->prepare();
-
-	echo $this->form()->openTag($form);
-	echo $this->formHidden($form->get('id'));
-	echo $this->formRow($form->get('title'));
-	echo $this->formRow($form->get('artist'));
-	echo $this->formSubmit($form->get('submit'));
-?>
-<a href="<?= $this->url('album', array('action' =>'index'))?>">Regresar</a>
-<?php
-	echo $this->form()->closeTag();
-?>
+	echo $this->partial('album/album/form.phtml', array('form' => $form));
+?>	
