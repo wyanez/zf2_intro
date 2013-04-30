@@ -1,6 +1,9 @@
 <?php
 	$title = 'Mis Albums';
 	$this->headTitle($title);
+
+    //Se inicializa el helper cycle para dibujar la tabla con colores alternos
+    $this->cycle()->assign(array("#F0F0F0","#FFFFFF"));
 ?>
 <h2><?php echo $this->escapeHtml($title); ?></h2>
 <p>
@@ -14,7 +17,8 @@
     <th>&nbsp;</th>
 </tr>
 <?php foreach ($albums as $album) : ?>
-<tr>
+<?php   $color = $this->cycle()->next(); ?>     
+<tr style="background-color: <?= $color ?>">
     <td><?php echo $this->escapeHtml($album->title);?></td>
     <td><?php echo $this->escapeHtml($album->artist);?></td>
     <td>
