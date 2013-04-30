@@ -6,6 +6,7 @@ use Zend\View\Model\ViewModel;
 
 use Album\Form\AlbumForm;
 use Album\Form\AlbumFilter;
+use Album\Model\Album;
 
 class AlbumController extends AbstractActionController{
 	protected $albumTable;
@@ -23,6 +24,18 @@ class AlbumController extends AbstractActionController{
 		$request= $this->getRequest();
 		if ($request->isPost()){
 			//Se procesa el form
+			$albumFilter = new AlbumFilter();
+			$form->setInputFilter($albumFilter->getInputFilter());
+			$form->setData($request->getPost());
+
+			if($form->isValid()){
+				$album = new Album(); 
+				$album->exchangeArray($form->getData());
+				$this->getAlbumTable()->saveAlbum($album);
+
+				//TODO Imprimir un mensaje de exito
+				return $this->redirect()->toRoute('album');
+			}
 		}
 		return array('form' => $form);
 	}

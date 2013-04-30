@@ -6,7 +6,7 @@ use Zend\InputFilter\inputFilter;
 use Zend\InputFilter\inputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-class AlbumFiter implements InputFilterAwareInterface{
+class AlbumFilter implements InputFilterAwareInterface{
 	protected $inputFilter;
 
 	public function setInputFilter(InputFilterInterface $inputFilter){
@@ -37,7 +37,7 @@ class AlbumFiter implements InputFilterAwareInterface{
 				 		array(
 				 		   'name' => 'StringLength',
 				 		   'options'=>array(
-				 		   		'encoding' =>'URF-8',
+				 		   		'encoding' =>'UTF-8',
 				 		   		'min'=>1,
 				 		   		'max'=>100
 				 		   	), 
@@ -56,7 +56,7 @@ class AlbumFiter implements InputFilterAwareInterface{
 				 		array(
 				 		   'name' => 'StringLength',
 				 		   'options'=>array(
-				 		   		'encoding' =>'URF-8',
+				 		   		'encoding' =>'UTF-8',
 				 		   		'min'=>1,
 				 		   		'max'=>100
 				 		   	), 
