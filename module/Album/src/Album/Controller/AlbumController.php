@@ -24,11 +24,8 @@ class AlbumController extends AbstractActionController{
 		$request= $this->getRequest();
 		if ($request->isPost()){
 			//Se procesa el form
-			$albumFilter = new AlbumFilter();
-			$form->setInputFilter($albumFilter->getInputFilter());
-			$form->setData($request->getPost());
-
-			if($form->isValid()){
+			$is_valid = $this->filterForm($form,$request->getPost());
+			if($is_valid){
 				$album = new Album(); 
 				$album->exchangeArray($form->getData());
 				$this->getAlbumTable()->saveAlbum($album);
@@ -55,10 +52,16 @@ class AlbumController extends AbstractActionController{
 
 		$form = $this->getForm('Editar');
 		$form->bind($album);
-		 
+
 		$request= $this->getRequest();
 		if ($request->isPost()){
 			//Se procesa el form
+			$is_valid = $this->filterForm($form,$request->getPost());
+			if($is_valid){
+				$this->getAlbumTable()->saveAlbum($form->getData());
+				//TODO Imprimir un mensaje de exito
+				return $this->redirect()->toRoute('album');	
+			}	
 		}
 
 		return array('id'=> $id , 
@@ -80,6 +83,13 @@ class AlbumController extends AbstractActionController{
 		$this->form = new AlbumForm();
 		$this->form->get('submit')->setValue($modo);
 		return $this->form;
+	}
+
+	private function filterForm($form,$data){
+		$albumFilter = new AlbumFilter();
+		$form->setInputFilter($albumFilter->getInputFilter());
+		$form->setData($data);
+		return $form->isValid();
 	}
 }
 ?>
