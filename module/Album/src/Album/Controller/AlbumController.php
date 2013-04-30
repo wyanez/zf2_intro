@@ -30,7 +30,7 @@ class AlbumController extends AbstractActionController{
 				$album->exchangeArray($form->getData());
 				$this->getAlbumTable()->saveAlbum($album);
 
-				//TODO Imprimir un mensaje de exito
+				$this->flashMessenger()->addMessage('Album incluido exitosamente!');
 				return $this->redirect()->toRoute('album');
 			}
 		}
@@ -59,7 +59,7 @@ class AlbumController extends AbstractActionController{
 			$is_valid = $this->filterForm($form,$request->getPost());
 			if($is_valid){
 				$this->getAlbumTable()->saveAlbum($form->getData());
-				//TODO Imprimir un mensaje de exito
+				$this->flashMessenger()->addMessage('Album editado exitosamente!');
 				return $this->redirect()->toRoute('album');	
 			}	
 		}
@@ -84,7 +84,7 @@ class AlbumController extends AbstractActionController{
                 $this->getAlbumTable()->deleteAlbum($id);
             }
 
-			//TODO Imprimir un mensaje de exito
+			$this->flashMessenger()->addMessage('Album eliminado exitosamente!');
 			return $this->redirect()->toRoute('album');		
 		}
 
