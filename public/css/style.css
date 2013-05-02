@@ -35,3 +35,16 @@ div.container a.brand {
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }
+
+#flash-messenger {
+  display: table; 
+  margin: 0 auto;
+  margin-top: 1em;  
+  margin-bottom: 1em; 
+  color: #000 !important;
+  border: 1px solid #02709C;
+  padding: 1em;
+  background-color: #f0f0f0;
+  font: bold smaller sans-serif;
+}
+
