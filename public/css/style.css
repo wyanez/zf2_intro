@@ -48,3 +48,10 @@ div.container a.brand {
   font: bold smaller sans-serif;
 }
 
+footer{
+  font-size: 10px; 
+}
+
+.breadcrumb{
+  font-size: 10px; 
+}
