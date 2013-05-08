@@ -10,6 +10,7 @@
     <a href="<?php echo $this->url('album', array('action'=>'add'));?>"><img src="/img/add.png" title="Agregar Album"/> Nuevo Album</a>
 </p>
 
+<div id="albums-index">
 <table class="table">
 <tr>
     <th>Title</th>
@@ -17,18 +18,36 @@
     <th>&nbsp;</th>
 </tr>
 <?php foreach ($albums as $album) : ?>
-<?php   $color = $this->cycle()->next(); ?>     
+<?php   
+    $color = $this->cycle()->next(); 
+?>     
 <tr style="background-color: <?= $color ?>">
     <td><?php echo $this->escapeHtml($album->title);?></td>
     <td><?php echo $this->escapeHtml($album->artist);?></td>
     <td>
         <a href="<?php echo $this->url('album',
             array('action'=>'edit', 'id' => $album->id));?>"><img src="/img/edit.png" title="Editar Album"/></a>
-        <a href="<?php echo $this->url('album',
-            array('action'=>'delete', 'id' => $album->id));?>"><img src="/img/delete.png" title="Eliminar Album"/></a>
+
+        <a href="#" id="remove-<?= $album->id ?>" class="delete-album"><img src="/img/delete.png" title="Eliminar Album"/></a>
+            
     </td>
 </tr>
 <?php endforeach; ?>
 </table>
+</div>
 
-<div id="flash-messenger"><?php  echo $this->flashMessenger()->render() ?></div>
+<?php 
+   if ($this->flashMessenger()->hasMessages()){ 
+        $display_flash='true';
+   } 
+   else{
+        $display_flash='none';
+   } 
+ ?>
+
+<div id="flash_msg" style="display:<?= $display_flash?>">
+  <div id="flash_msg_alert" class="alert alert-info fade">
+    <button type="button" class="close">&times;</button>
+    <span id="flash_txt"><?php  echo $this->flashMessenger()->render() ?></span>
+  </div>
+</div>
