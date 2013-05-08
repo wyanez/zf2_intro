@@ -34,6 +34,9 @@ class AlbumForm extends Form{
 					'value' => 'Aceptar',
 					'id' => 'submitbutton',
 				), 
+				'attributes' => array(
+					'class' => 'btn btn-primary',	
+				),
 		));
 
 
