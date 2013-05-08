@@ -69,15 +69,14 @@ class AlbumController extends AbstractActionController{
 	}
 
 	public function deleteAction(){
-		$id = (int) $this->params()->fromRoute('id',0);
-		if(!$id){
-			return $this->redirect()->toRoute('album');
-		} 
-
-        $this->getAlbumTable()->deleteAlbum($id);
-
-		$this->flashMessenger()->addMessage('Album eliminado exitosamente!');
-		return $this->redirect()->toRoute('album');		
+		$request= $this->getRequest();
+		$response= $this->getResponse(); 
+		if($request->isPost()){
+	    	$id= (int) $request->getPost('id');
+	        $ok=$this->getAlbumTable()->deleteAlbum($id);
+	       	$response->setContent(\Zend\Json\Json::encode(array('response' => true)));
+	  	}
+		return $response;
 	}
 
 	private function getAlbumTable(){
