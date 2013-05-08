@@ -17,15 +17,19 @@
     <th>&nbsp;</th>
 </tr>
 <?php foreach ($albums as $album) : ?>
-<?php   $color = $this->cycle()->next(); ?>     
+<?php   
+    $color = $this->cycle()->next(); 
+    $url_delete = $this->url('album',array('action'=>'delete', 'id' => $album->id));
+?>     
 <tr style="background-color: <?= $color ?>">
     <td><?php echo $this->escapeHtml($album->title);?></td>
     <td><?php echo $this->escapeHtml($album->artist);?></td>
     <td>
         <a href="<?php echo $this->url('album',
             array('action'=>'edit', 'id' => $album->id));?>"><img src="/img/edit.png" title="Editar Album"/></a>
-        <a href="<?php echo $this->url('album',
-            array('action'=>'delete', 'id' => $album->id));?>"><img src="/img/delete.png" title="Eliminar Album"/></a>
+
+        <a href="#" onclick="deleteRecord('<?= $url_delete ?>')"><img src="/img/delete.png" title="Eliminar Album"/></a>
+            
     </td>
 </tr>
 <?php endforeach; ?>
