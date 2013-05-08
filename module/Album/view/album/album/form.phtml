@@ -7,7 +7,7 @@
 	echo $this->formRow($form->get('artist'));
 	echo $this->formSubmit($form->get('submit'));
 ?>
-<a href="<?= $this->url('album', array('action' =>'index'))?>">Regresar</a>
+<a class="btn btn-link" href="<?= $this->url('album', array('action' =>'index'))?>">Regresar</a>
 <?php
 	echo $this->form()->closeTag();
 ?>

@@ -30,7 +30,7 @@ class AlbumController extends AbstractActionController{
 				$album->exchangeArray($form->getData());
 				$this->getAlbumTable()->saveAlbum($album);
 
-				//TODO Imprimir un mensaje de exito
+				$this->flashMessenger()->addMessage('Album incluido exitosamente!');
 				return $this->redirect()->toRoute('album');
 			}
 		}
@@ -59,7 +59,7 @@ class AlbumController extends AbstractActionController{
 			$is_valid = $this->filterForm($form,$request->getPost());
 			if($is_valid){
 				$this->getAlbumTable()->saveAlbum($form->getData());
-				//TODO Imprimir un mensaje de exito
+				$this->flashMessenger()->addMessage('Album editado exitosamente!');
 				return $this->redirect()->toRoute('album');	
 			}	
 		}
@@ -69,29 +69,14 @@ class AlbumController extends AbstractActionController{
 	}
 
 	public function deleteAction(){
-		$id = (int) $this->params()->fromRoute('id',0);
-		if(!$id){
-			return $this->redirect()->toRoute('album');
-		} 
-
 		$request= $this->getRequest();
-		if ($request->isPost()){
-			//se procede a eliminar de acuerdo a la selección del usuario
-			$del = $request->getPost('del', 'No');
-
-            if ($del == 'Si') {
-                $id = (int) $request->getPost('id');
-                $this->getAlbumTable()->deleteAlbum($id);
-            }
-
-			//TODO Imprimir un mensaje de exito
-			return $this->redirect()->toRoute('album');		
-		}
-
-		return array(
-            'id'    => $id,
-            'album' => $this->getAlbumTable()->getAlbum($id)
-        );		
+		$response= $this->getResponse(); 
+		if($request->isPost()){
+	    	$id= (int) $request->getPost('id');
+	        $ok=$this->getAlbumTable()->deleteAlbum($id);
+	       	$response->setContent(\Zend\Json\Json::encode(array('response' => true)));
+	  	}
+		return $response;
 	}
 
 	private function getAlbumTable(){

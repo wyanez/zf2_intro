@@ -55,6 +55,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
     ),
     'translator' => array(
@@ -86,6 +87,36 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
+        ),
+    ),
+
+    'navigation' => array(
+        'default' => array(
+            array(
+                'label' => 'Inicio',
+                'route' => 'home',
+            ),
+            array(
+                'label' => 'Album',
+                'route' => 'album',
+                'pages' => array(
+                    array(
+                        'label' => 'Agregar',
+                        'route' => 'album',
+                        'action' => 'add',
+                    ),
+                    array(
+                        'label' => 'Editar',
+                        'route' => 'album',
+                        'action' => 'edit',
+                    ),
+                    array(
+                        'label' => 'Eliminar',
+                        'route' => 'album',
+                        'action' => 'delete',
+                    ),
+                ),
+            ),
         ),
     ),
 );
