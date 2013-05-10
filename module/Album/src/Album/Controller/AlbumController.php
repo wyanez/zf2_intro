@@ -8,9 +8,15 @@ use Album\Form\AlbumForm;
 use Album\Form\AlbumFilter;
 use Album\Model\Album;
 
+use Doctrine\ORM\EntityManager;
+
 class AlbumController extends AbstractActionController{
 	protected $albumTable;
 	protected $form;
+	/**
+	*	@var Doctrine\ORM\EntityManager
+	*/
+	protected $em;
 
 	public function indexAction(){
 		return new ViewModel( array(
@@ -98,6 +104,17 @@ class AlbumController extends AbstractActionController{
 		$form->setInputFilter($albumFilter->getInputFilter());
 		$form->setData($data);
 		return $form->isValid();
+	}
+
+	public function getEntityManager(){
+		if($this->em == null){
+			$this->em=$this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); 
+		}	
+		return $this->em;
+	}
+
+	public function setEntityManager(EntityManager $em){
+		$this->em = $em;
 	}
 }
 ?>
