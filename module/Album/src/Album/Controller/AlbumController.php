@@ -6,12 +6,12 @@ use Zend\View\Model\ViewModel;
 
 use Album\Form\AlbumForm;
 use Album\Form\AlbumFilter;
-use Album\Model\Album;
+use Zend\Json\Json;
 
+use Album\Entity\Album;
 use Doctrine\ORM\EntityManager;
 
 class AlbumController extends AbstractActionController{
-	protected $albumTable;
 	protected $form;
 	/**
 	*	@var Doctrine\ORM\EntityManager
@@ -19,9 +19,11 @@ class AlbumController extends AbstractActionController{
 	protected $em;
 
 	public function indexAction(){
+		$albums = $this->getEntityManager()->getRepository('Album\Entity\Album')->findAll();
 		return new ViewModel( array(
-				'albums' =>$this->getAlbumTable()->fetchAll(),
-			));
+				'albums' =>$albums,
+			)
+		);
 	}
 
 	public function addAction(){
@@ -33,8 +35,9 @@ class AlbumController extends AbstractActionController{
 			$is_valid = $this->filterForm($form,$request->getPost());
 			if($is_valid){
 				$album = new Album(); 
-				$album->exchangeArray($form->getData());
-				$this->getAlbumTable()->saveAlbum($album);
+				$album->populate($form->getData());
+				$this->getEntityManager()->persist($album);
+				$this->getEntityManager()->flush();
 
 				$this->flashMessenger()->addMessage('Album incluido exitosamente!');
 				return $this->redirect()->toRoute('album');
@@ -42,7 +45,7 @@ class AlbumController extends AbstractActionController{
 		}
 		return array('form' => $form);
 	}
-
+	
 	public function editAction(){
 		$id = (int) $this->params()->fromRoute('id',0);
 		if(!$id){
@@ -50,13 +53,14 @@ class AlbumController extends AbstractActionController{
 		} 
 
 		try{
-			$album = $this->getAlbumTable()->getAlbum($id);
+			$album = $this->getEntityManager()->find('Album\Entity\Album',$id);
 		}
 		catch(\Exception $ex){
 			return $this->redirect()->toRoute('album');	
 		}
 
 		$form = $this->getForm('Editar');
+		$form->setBindOnValidate(false);  //OJO
 		$form->bind($album);
 
 		$request= $this->getRequest();
@@ -64,7 +68,9 @@ class AlbumController extends AbstractActionController{
 			//Se procesa el form
 			$is_valid = $this->filterForm($form,$request->getPost());
 			if($is_valid){
-				$this->getAlbumTable()->saveAlbum($form->getData());
+				$form->bindValues();
+				$this->getEntityManager()->flush();
+
 				$this->flashMessenger()->addMessage('Album editado exitosamente!');
 				return $this->redirect()->toRoute('album');	
 			}	
@@ -73,25 +79,24 @@ class AlbumController extends AbstractActionController{
 		return array('id'=> $id , 
 			         'form' =>$form);
 	}
-
+	
 	public function deleteAction(){
 		$request= $this->getRequest();
 		$response= $this->getResponse(); 
 		if($request->isPost()){
 	    	$id= (int) $request->getPost('id');
-	        $ok=$this->getAlbumTable()->deleteAlbum($id);
-	       	$response->setContent(\Zend\Json\Json::encode(array('response' => true)));
+	        $album = $this->getEntityManager()->find('Album\Entity\Album',$id);
+	        if($album){
+	        	$this->getEntityManager()->remove($album);
+	        	$this->getEntityManager()->flush();
+	        	$ok=true;
+	        }
+	        else $ok=false;
+	       	$response->setContent(Json::encode(array('response' => $ok)));
 	  	}
 		return $response;
 	}
 
-	private function getAlbumTable(){
-		if(!$this->albumTable){
-			$sm = $this->getServiceLocator();
-			$this->albumTable = $sm->get('Album\Model\AlbumTable'); 
-		}
-		return $this->albumTable;
-	}
 
 	private function getForm($modo){
 		$this->form = new AlbumForm();
@@ -107,8 +112,8 @@ class AlbumController extends AbstractActionController{
 	}
 
 	public function getEntityManager(){
-		if($this->em == null){
-			$this->em=$this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); 
+		if($this->em == null){	
+			$this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 		}	
 		return $this->em;
 	}

@@ -9,7 +9,7 @@ $(document).ready(function() {
 	        var remove_id = $(this).attr('id');
 	        remove_id = remove_id.replace("remove-","");
 
-	        $.post("delete", {
+	        $.post("/album/delete", {
 	            id: remove_id
 	        },
 	        function(data){
